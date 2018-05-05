@@ -9,5 +9,8 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production"
+    },
+    "dependencies": {
+        "bootstrap-sass": "^3.3.7"
     }
 }
