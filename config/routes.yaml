@@ -4,3 +4,8 @@
 homepage_index:
     path: /
     controller: App\Controller\HomepageController::index
+
+
+user_upload:
+    path: /upload
+    controller: App\Controller\UserController::upload
