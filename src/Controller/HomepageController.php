@@ -9,6 +9,9 @@ class HomepageController extends Controller
 {
     public function index()
     {
-        return $this->render('base.html.twig');
+        $listImages = array_slice(scandir('images/thumbnail'), 2);
+        return $this->render('gallery.html.twig', [
+          'images'=>$listImages
+        ]);
     }
 }

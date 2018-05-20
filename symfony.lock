@@ -71,6 +71,9 @@
     "fig/link-util": {
         "version": "1.0.0"
     },
+    "gumlet/php-image-resize": {
+        "version": "1.8.0"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },

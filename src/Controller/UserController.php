@@ -1,31 +1,34 @@
 <?php
 
-/**
- * [namespace description]
- * @var [type]
- */
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Gumlet\ImageResize;
 
-/**
- * [UserController description]
- */
 class UserController extends Controller
 {
     public function upload(Request $request)
     {
-        echo $this->container->getParameter('kernel.root_dir');
-        if ($request->getMethod()=='GET') {
-            return $this->render('user/upload.html.twig');
+        if ($request->getMethod()==='GET') {
+            return $this->render('upload.html.twig');
         } else {
             $file = $request->files->get('file');
 
-            $folderPath = getenv('upload_path').'/username/';
-            $file->move($folderPath);
-            return new Response('OK');
+            $path = $this->container->getParameter('kernel.project_dir').'/public/images/';
+
+            $extension = $file->getClientOriginalExtension();
+            $newFileName = hash('md5', microtime());
+            $newName = $newFileName.'.'.$extension;
+
+            $file->move($path.'/original', $newName);
+
+            $imageResize = new ImageResize($path.'/original/'.$newName);
+            $imageResize->scale(10);
+            $imageResize->save($path.'/thumbnail/'.$newFileName.'.'.$extension);
+
+            return $this->redirectToRoute('homepage_index');
         }
     }
 }
