@@ -1,9 +1,6 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
-homepage_index:
+app_index:
     path: /
-    controller: App\Controller\HomepageController::index
+    controller: App\Controller\AppController::index
 
 
 user_upload:
