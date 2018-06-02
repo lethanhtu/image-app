@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,6 +43,17 @@ class Image
      * @ORM\JoinColumn(nullable=false)
      */
     private $uploadedBy;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="imageLike")
+     * @ORM\JoinTable(name="like")
+     */
+    private $likedBy;
+
+    public function __construct()
+    {
+        $this->likedBy = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -103,6 +116,32 @@ class Image
     public function setUploadedBy(?User $uploadedBy): self
     {
         $this->uploadedBy = $uploadedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getLikedBy(): Collection
+    {
+        return $this->likedBy;
+    }
+
+    public function addLikedBy(User $likedBy): self
+    {
+        if (!$this->likedBy->contains($likedBy)) {
+            $this->likedBy[] = $likedBy;
+        }
+
+        return $this;
+    }
+
+    public function removeLikedBy(User $likedBy): self
+    {
+        if ($this->likedBy->contains($likedBy)) {
+            $this->likedBy->removeElement($likedBy);
+        }
 
         return $this;
     }

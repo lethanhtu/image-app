@@ -48,9 +48,16 @@ class User
      */
     private $imageUpload;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Image", mappedBy="likedBy")
+     * @ORM\JoinTable(name="like")
+     */
+    private $imageLike;
+
     public function __construct()
     {
         $this->imageUpload = new ArrayCollection();
+        $this->imageLike = new ArrayCollection();
     }
 
 
@@ -145,6 +152,34 @@ class User
             if ($imageUpload->getUploadedBy() === $this) {
                 $imageUpload->setUploadedBy(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImageLike(): Collection
+    {
+        return $this->imageLike;
+    }
+
+    public function addImageLike(Image $imageLike): self
+    {
+        if (!$this->imageLike->contains($imageLike)) {
+            $this->imageLike[] = $imageLike;
+            $imageLike->addLikedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImageLike(Image $imageLike): self
+    {
+        if ($this->imageLike->contains($imageLike)) {
+            $this->imageLike->removeElement($imageLike);
+            $imageLike->removeLikedBy($this);
         }
 
         return $this;
