@@ -46,7 +46,7 @@ class Image
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="imageLike")
-     * @ORM\JoinTable(name="like")
+     * @ORM\JoinTable(name="`like`")
      */
     private $likedBy;
 

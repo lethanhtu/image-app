@@ -50,7 +50,7 @@ class User
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Image", mappedBy="likedBy")
-     * @ORM\JoinTable(name="like")
+     * @ORM\JoinTable(name="`like`")
      */
     private $imageLike;
 

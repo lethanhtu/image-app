@@ -6,3 +6,15 @@ app_index:
 user_upload:
     path: /upload
     controller: App\Controller\UserController::upload
+
+user_list_like:
+    path: /like
+    controller: App\Controller\UserController::getListLike
+
+user_remove_like:
+    path: /remove-like
+    controller: App\Controller\UserController::removeLike
+
+user_add_like:
+    path: /add-like
+    controller: App\Controller\UserController::addLike
