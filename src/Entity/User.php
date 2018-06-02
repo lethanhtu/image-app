@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,7 +26,33 @@ class User
     /**
      * @ORM\Column(type="string", length=255)
      */
+    private $full_name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $password;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_date;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="uploadedBy")
+     */
+    private $imageUpload;
+
+    public function __construct()
+    {
+        $this->imageUpload = new ArrayCollection();
+    }
+
 
     public function getId()
     {
@@ -43,6 +71,30 @@ class User
         return $this;
     }
 
+    public function getFullName(): ?string
+    {
+        return $this->full_name;
+    }
+
+    public function setFullName(string $full_name): self
+    {
+        $this->full_name = $full_name;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     public function getPassword(): ?string
     {
         return $this->password;
@@ -51,6 +103,49 @@ class User
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getCreatedDate(): ?\DateTimeInterface
+    {
+        return $this->created_date;
+    }
+
+    public function setCreatedDate(\DateTimeInterface $created_date): self
+    {
+        $this->created_date = $created_date;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImageUpload(): Collection
+    {
+        return $this->imageUpload;
+    }
+
+    public function addImageUpload(Image $imageUpload): self
+    {
+        if (!$this->imageUpload->contains($imageUpload)) {
+            $this->imageUpload[] = $imageUpload;
+            $imageUpload->setUploadedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImageUpload(Image $imageUpload): self
+    {
+        if ($this->imageUpload->contains($imageUpload)) {
+            $this->imageUpload->removeElement($imageUpload);
+            // set the owning side to null (unless already changed)
+            if ($imageUpload->getUploadedBy() === $this) {
+                $imageUpload->setUploadedBy(null);
+            }
+        }
 
         return $this;
     }
