@@ -64,6 +64,7 @@ class User
         $this->imageUpload = new ArrayCollection();
         $this->imageLike = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->created_date = new \DateTime();
     }
 
 
@@ -122,6 +123,7 @@ class User
 
     public function getCreatedDate(): ?\DateTimeInterface
     {
+
         return $this->created_date;
     }
 

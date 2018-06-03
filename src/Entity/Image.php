@@ -59,6 +59,7 @@ class Image
     {
         $this->likedBy = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->created_date = new \DateTime();
     }
 
     public function getId()
