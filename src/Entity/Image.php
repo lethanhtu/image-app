@@ -55,6 +55,16 @@ class Image
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $filename;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $extension;
+
     public function __construct()
     {
         $this->likedBy = new ArrayCollection();
@@ -180,6 +190,30 @@ class Image
                 $comment->setImage(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFilename(): ?string
+    {
+        return $this->filename;
+    }
+
+    public function setFilename(string $filename): self
+    {
+        $this->filename = $filename;
+
+        return $this;
+    }
+
+    public function getExtension(): ?string
+    {
+        return $this->extension;
+    }
+
+    public function setExtension(string $extension): self
+    {
+        $this->extension = $extension;
 
         return $this;
     }

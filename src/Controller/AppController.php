@@ -12,9 +12,19 @@ class AppController extends Controller
 {
     public function index()
     {
-        $listImages = array_slice(scandir('images/thumbnail'), 2);
+        $images = $this->getDoctrine()->getRepository(Image::class)->findAll();
+        $data = [];
+        foreach ($images as $image) {
+            $data[] = [
+                'like'=>count($image->getLikedBy()),
+                'comment'=>count($image->getComments()),
+                'fileName'=>$image->getFileName(),
+                'uploadedByName'=>$image->getUploadedBy()->getFullName()
+            ];
+        }
+        $listImages = [];
         return $this->render('gallery.html.twig', [
-          'images'=>$listImages
+          'images' => $data
         ]);
     }
 }

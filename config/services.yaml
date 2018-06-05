@@ -28,6 +28,7 @@ services:
 
     App\Service\ImageProcessor:
        arguments:
+           - '@doctrine'
            - '%kernel.project_dir%/public/images'
 
     # add more service definitions when explicit configuration is needed

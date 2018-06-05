@@ -28,36 +28,4 @@ class UserController extends Controller
             return $this->redirectToRoute('app_index');
         }
     }
-
-    public function getListLike()
-    {
-        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->find(1);
-        $imageLikes = $user->getImageLike();
-        foreach($imageLikes as $image){
-            echo $image->getId().'-'.$image->getTitle()."<br/>";
-        }
-        return new Response('ok');
-    }
-
-    public function removeLike()
-    {
-        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->find(1);
-        $image = $this->getDoctrine()->getManager()->getRepository(Image::class)->find(7);
-        $user->removeImageLike($image);
-        $this->getDoctrine()->getManager()->persist($user);
-        $this->getDoctrine()->getManager()->flush();
-
-        return new Response('ok');
-    }
-
-    public function addLike()
-    {
-        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->find(1);
-        $image = $this->getDoctrine()->getManager()->getRepository(Image::class)->find(7);
-        $user->addImageLike($image);
-        $this->getDoctrine()->getManager()->persist($user);
-        $this->getDoctrine()->getManager()->flush();
-
-        return new Response('ok');
-    }
 }
