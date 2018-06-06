@@ -16,6 +16,7 @@ class AppController extends Controller
         $data = [];
         foreach ($images as $image) {
             $data[] = [
+                'id'=>$image->getId(),
                 'like'=>count($image->getLikedBy()),
                 'comment'=>count($image->getComments()),
                 'fileName'=>$image->getFileName(),
@@ -25,6 +26,20 @@ class AppController extends Controller
         $listImages = [];
         return $this->render('gallery.html.twig', [
           'images' => $data
+        ]);
+    }
+
+    public function view($id)
+    {
+        $image = $images = $this->getDoctrine()->getRepository(Image::class)->find($id);
+        if(!$image) {
+            return new Response('Image not found');
+        }
+
+        return $this->render('image_detail.html.twig',[
+            'image'=>[
+                'fileName'=>$image->getFileName()
+            ]
         ]);
     }
 }

@@ -20,7 +20,7 @@ class ImageProcessor
 
     public function save($file)
     {
-        $extension = $file->getExtension();
+        $extension = $file->getClientOriginalExtension();
         $newFileName = hash('md5', microtime());
         $newName = $newFileName.'.'.$extension;
 
