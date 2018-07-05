@@ -5,12 +5,15 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
+    const ROLE_ADMIN = 1;
+    const ROLE_USER = 2;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -59,12 +62,18 @@ class User
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $role;
+
     public function __construct()
     {
         $this->imageUpload = new ArrayCollection();
         $this->imageLike = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->created_date = new \DateTime();
+        $this->role = self::ROLE_USER;
     }
 
 
@@ -223,4 +232,32 @@ class User
 
         return $this;
     }
+
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function getSalt()
+    {
+        return;
+    }
+
+    public function eraseCredentials()
+    {
+        return;
+    }
+
+    public function getRole(): ?int
+    {
+        return $this->role;
+    }
+
+    public function setRole(int $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
 }

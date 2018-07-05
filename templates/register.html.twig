@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="form-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-xs-2"></div>
+                <div class="col-lg-4 col-md-4 col-xs-8">
+                    {{form_start(form)}}
+                    {% for row in form.children %}
+                        {% if row.children is empty and row.vars.block_prefixes[1] != 'hidden' %}
+                            {% if row.vars.name == 'terms_accepted' %}
+                                <div class="form-group">
+                                    <label>
+                                        {{ form_widget(row) }}
+                                        {{ row.vars.label }}
+                                    </label>
+                                </div>
+                            {% else %}
+                                <div class="form-group">
+                                    {{ form_label(row) }}
+                                    {{ form_widget(row, {'attr':{'class':'form-control'}}
+                                    ) }}
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            {% for child in row.children%}
+                                <div class="form-group">
+                                    {{ form_label(child) }}
+                                    {{ form_widget(child, {'attr':{'class':'form-control'}})}}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    <button class="btn btn-primary" type="submit">Register</button>
+                    {{form_end(form)}}
+                </div>
+                <div class="col-lg-4 col-md-4 col-xs-2"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
