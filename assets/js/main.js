@@ -1,16 +1,18 @@
 $(document).ready(function() {
 
-    var imageId = $('#like').attr('image-id');
+    $('body').on('click','#like', function() {
 
-    $('#like').on('click', function() {
-        var data = {"image_id": imageId};
-        $.post('/like', data, function(data){
-            if(data['success']) {
+        var imageId = $('#like').attr('image-id');
+        var action =  $('#like').attr('action');
 
-            } else if(!data['success'] && data['error_info'] == 'required_login') {
+        $.post('/like', {"image_id": imageId, 'action': action}, function(result){
+            if(result['success']) {
+                $('#like').parent().html(result['html']);
+                console.log(result['html']);
+            } else if(!result['success'] && result['error_info'] == 'required_login') {
                 window.location.href = "/login?next="+window.location.pathname;
             } else {
-                // you can implement more rules as you want
+                alert(result['error_info']);
             }
         });
     });

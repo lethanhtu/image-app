@@ -34,19 +34,22 @@ class AppController extends Controller
         if(!$image) {
             return new Response('Image not found');
         }
+
+        $likedBy = $image->getLikedBy();
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
-        if('object' !== gettype($user)) {
-            
+        $likedByCurrentUser = false;
+
+        if('object' == gettype($user) && $likedBy->contains($user)) {
+            $likedByCurrentUser = true;
         }
         return $this->render('image_detail.html.twig',[
-            'image'=>[
-                'fileName'=>$image->getFileName(),
-                'id'=> $image->getId(),
-                'uploadedBy' => $image->getUploadedBy()->getUsername(),
-                'createdDate' => $image->getCreatedDate(),
-                'likeCount' => count($image->getLikedBy()),
-                'size' => $image->getSize()
-            ]
+            'fileName'=>$image->getFileName(),
+            'id'=> $image->getId(),
+            'uploadedBy' => $image->getUploadedBy()->getUsername(),
+            'createdDate' => $image->getCreatedDate(),
+            'likeCount' => count($likedBy),
+            'size' => $image->getSize(),
+            'likedByCurrentUser'=> $likedByCurrentUser
         ]);
     }
 

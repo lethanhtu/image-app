@@ -52,27 +52,61 @@ class UserController extends Controller
     public function like(Request $request)
     {
         $imageId = $request->get('image_id');
+        $action = $request->get('action');
         $doctrine = $this->getDoctrine();
+
         $image = $images = $doctrine->getRepository(Image::class)->find($imageId);
+
+        // Validate image id is invalid
+        if(empty($image)) {
+            return new JsonResponse([
+                'success' => false,
+                'error_info'=>'image_not_found'
+            ]);
+        }
+
+        // Validate action is invalid
+        if($action !=='unlike' &&  $action !== 'like') {
+            return new JsonResponse([
+                'success' => false,
+                'error_info'=>'action_invalid'
+            ]);
+        }
+
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
-        $error = true;
+
+        // Check there is a logged in user
         if('object' !== gettype($user)) {
             return new JsonResponse([
                 'success'=>false,
                 'error_info' => 'required_login'
             ]);
-        } else {
-            $image->addLikedBy($user);
-            $manager = $doctrine->getManager();
-            $manager->persist($image);
-            $manager->flush();
-
-            return new JsonResponse([
-                'success' => true,
-                'total_like' => count($image->getLikedBy())
-            ]);
         }
 
+        $manager = $doctrine->getManager();
+
+        if($action == 'like') {
+            $image->addLikedBy($user);
+            $likedByCurrentUser  = true;
+        } else {
+            $image->removeLikedBy($user);
+            $likedByCurrentUser = false;
+        }
+
+        $manager->persist($image);
+        $manager->flush();
+
+        $twig = $this->get('twig');
+        $template = $twig->loadTemplate('image_detail.html.twig');
+
+        return new JsonResponse([
+            'success' => true,
+            'html' => $template->renderBlock('like',[
+                'id' => $imageId,
+                'likedByCurrentUser' => $likedByCurrentUser,
+                'likeCount' => count($image->getLikedBy())
+            ])
+        ]);
     }
 
     public function login(AuthenticationUtils $authUtil)
