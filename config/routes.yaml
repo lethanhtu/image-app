@@ -1,26 +1,26 @@
-app_index:
+index:
     path: /
     controller: App\Controller\AppController::index
 
-app_view_image:
-    path: /detail/{id}
+view_image:
+    path: /detail/{imageId}
     controller: App\Controller\AppController::view
 
-user_upload:
+dowload_image:
+    path: /download/{imageId}
+    controller: App\Controller\AppController::download
+
+upload:
     path: /upload
     controller: App\Controller\UserController::upload
 
-user_list_like:
-    path: /like
-    controller: App\Controller\UserController::getListLike
-
-user_remove_like:
-    path: /remove-like
+unlike:
+    path: /unlike
     controller: App\Controller\UserController::removeLike
 
-user_add_like:
-    path: /add-like
-    controller: App\Controller\UserController::addLike
+like:
+    path: /like
+    controller: App\Controller\UserController::like
 
 login:
     path: /login

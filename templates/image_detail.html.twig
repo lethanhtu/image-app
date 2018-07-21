@@ -3,7 +3,33 @@
 {% block body %}
     <div class="container">
         <div class="row">
-            <img class="image-detail" src="{{'/images/original/' ~ image['fileName']}}"/>
+            <div class="col-lg-1 col-md-1 col-xs-1">
+            </div>
+            <div class="col-lg-10 col-md-10 col-xs-10">
+                <div class="image-detail">
+                    <img src="{{'/images/original/' ~ image['fileName']}}"/>
+                </div>
+                <hr>
+                <div>
+                    <div class="float-left">
+
+                        <span class="h4" id="like" image-id="{{ image['id'] }}" >
+                            <i class="fa fa-thumbs-o-up"></i>
+                        </span>
+                        <small>
+                            <span id="like-count">{{image['likeCount']}}</span> likes
+                        </small>
+                    </div>
+                    <div class="float-right">
+                        <small>
+                            Uploaded by <strong>{{ image['uploadedBy'] }}</strong> on {{ image['createdDate']|date('m-d-Y') }}
+                            <span id="download"><i class="fa fa-download" aria-hidden="true"></i></span></span> {{image['size']}}
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-1 col-xs-1">
+            </div>
         </div>
     </div>
 {% endblock %}

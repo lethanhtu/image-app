@@ -150,7 +150,6 @@ class Image
         if (!$this->likedBy->contains($likedBy)) {
             $this->likedBy[] = $likedBy;
         }
-
         return $this;
     }
 

@@ -3,13 +3,6 @@
         <img class="img-fluid img-thumbnail" src="{{'/images/thumbnail/' ~ image['fileName']}}">
     </a>
     <span class="figure-caption">
-        By
-        <span>{{image['uploadedByName']}}</span>
-        <span class="comment float-right">
-            <i class="fa fa-comment-o"></i>({{image['like']}})
-        </span>
-        <span class="like float-right">
-            <i class="fa fa-thumbs-o-up"></i>({{image['comment']}})
-        </span>
+        <small>By {{image['uploadedByName']}}</small>
     </span>
 </div>

@@ -1,4 +1,18 @@
 {% extends 'base.html.twig' %}
+{% form_theme form _self %}
+
+{# form_errors.html.twig #}
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+        <div>
+            {% for error in errors %}
+                <small class="text-danger">{{ error.message }}</small>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
 {% block body %}
     <div class="form-content">
         <div class="container">
@@ -17,7 +31,8 @@
                                 </div>
                             {% else %}
                                 <div class="form-group">
-                                    {{ form_label(row) }}
+                                    {{ form_label(row, null, {'label_attr':{'class':'font-weight-bold'}}) }}
+                                    {{ form_errors(row) }}
                                     {{ form_widget(row, {'attr':{'class':'form-control'}}
                                     ) }}
                                 </div>
@@ -25,7 +40,8 @@
                         {% else %}
                             {% for child in row.children%}
                                 <div class="form-group">
-                                    {{ form_label(child) }}
+                                    {{ form_label(child, null, {'label_attr':{'class':'font-weight-bold'}}) }}
+                                    {{ form_errors(child) }}
                                     {{ form_widget(child, {'attr':{'class':'form-control'}})}}
                                 </div>
                             {% endfor %}
