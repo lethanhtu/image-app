@@ -21,7 +21,7 @@ class Image
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private $filename;
 
     /**
      * @ORM\Column(type="integer")
@@ -51,19 +51,9 @@ class Image
     private $likedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="Image")
-     */
-    private $comments;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
-    private $filename;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $extension;
+    private $hashedName;
 
     public function __construct()
     {
@@ -77,14 +67,14 @@ class Image
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getFilename(): ?string
     {
-        return $this->title;
+        return $this->filename;
     }
 
-    public function setTitle(string $title): self
+    public function setFilename(string $filename): self
     {
-        $this->title = $title;
+        $this->filename = $filename;
 
         return $this;
     }
@@ -162,57 +152,14 @@ class Image
         return $this;
     }
 
-    /**
-     * @return Collection|Comment[]
-     */
-    public function getComments(): Collection
+    public function getHashedName(): ?string
     {
-        return $this->comments;
+        return $this->hashedName;
     }
 
-    public function addComment(Comment $comment): self
+    public function setHashedName(string $hashedName): self
     {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setImage($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): self
-    {
-        if ($this->comments->contains($comment)) {
-            $this->comments->removeElement($comment);
-            // set the owning side to null (unless already changed)
-            if ($comment->getImage() === $this) {
-                $comment->setImage(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getFilename(): ?string
-    {
-        return $this->filename;
-    }
-
-    public function setFilename(string $filename): self
-    {
-        $this->filename = $filename;
-
-        return $this;
-    }
-
-    public function getExtension(): ?string
-    {
-        return $this->extension;
-    }
-
-    public function setExtension(string $extension): self
-    {
-        $this->extension = $extension;
+        $this->hashedName = $hashedName;
 
         return $this;
     }

@@ -30,7 +30,7 @@ class UserController extends Controller
             'notice',
             'Thank you for your registration, you can login <a href="'.$this->generateUrl('login').'"> here </a>'
         );
-            return $this->redirectToRoute('app_index');
+            return $this->redirectToRoute('index');
         }
 
         return $this->render('register.html.twig', [
@@ -38,6 +38,22 @@ class UserController extends Controller
         ]);
     }
 
+    public function login(AuthenticationUtils $authUtil)
+    {
+        $error = $authUtil->getLastAuthenticationError();
+
+        $lastUsername = $authUtil->getLastUsername();
+
+        return $this->render('login.html.twig', [
+            'last_username' => $lastUsername,
+            'error'=>$error
+        ]);
+    }
+
+    public function logout()
+    {
+        return new Response();
+    }
 
     public function upload(Request $request, ImageProcessor $imageProcessor)
     {
@@ -45,7 +61,7 @@ class UserController extends Controller
             return $this->render('upload.html.twig');
         } else {
             $imageProcessor->save($request->files->get('image'));
-            return $this->redirectToRoute('app_index');
+            return $this->redirectToRoute('index');
         }
     }
 
@@ -109,20 +125,67 @@ class UserController extends Controller
         ]);
     }
 
-    public function login(AuthenticationUtils $authUtil)
+    public function view($imageId)
     {
-        $error = $authUtil->getLastAuthenticationError();
+        $image = $images = $this->getDoctrine()->getRepository(Image::class)->find($imageId);
+        if(!$image) {
+            return new Response('Image not found');
+        }
 
-        $lastUsername = $authUtil->getLastUsername();
+        $likedBy = $image->getLikedBy();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $likedByCurrentUser = false;
 
-        return $this->render('login.html.twig', [
-            'last_username' => $lastUsername,
-            'error'=>$error
+        if('object' == gettype($user) && $likedBy->contains($user)) {
+            $likedByCurrentUser = true;
+        }
+        return $this->render('image_detail.html.twig',[
+            'hashedName'=>$image->getHashedName(),
+            'id'=> $image->getId(),
+            'uploadedBy' => $image->getUploadedBy()->getUsername(),
+            'createdDate' => $image->getCreatedDate(),
+            'likeCount' => count($likedBy),
+            'size' => $image->getSize(),
+            'likedByCurrentUser'=> $likedByCurrentUser
         ]);
     }
 
-    public function logout()
+    public function download($imageId)
     {
-        return new Response();
+        $image = $this->getDoctrine()->getRepository(Image::class)->find($imageId);
+        if ($image) {
+            $content = file_get_contents($this->container->getParameter('kernel.project_dir').'/public/images/original/'.$image->getHashedName());
+            return new Response($content, Response::HTTP_OK,[
+                'Content-Type' => 'image/jpeg',
+                'Content-Length' => 424586,
+                'Content-Disposition'=> sprintf('attachment; filename="%s"',$image->getFilename())
+            ]);
+        }
+
+        throw new \Exception('Image not found');
+
+    }
+
+    public function delete($imageId)
+    {
+        $image = $images = $this->getDoctrine()->getRepository(Image::class)->find($imageId);
+        if($image) {
+            $user = $this->container->get('security.token_storage')->getToken()->getUser();
+            if('object' != gettype($user) || ($user->getId() != $image->getUploadedBy()->getId() && $user->getRole() != 1)) {
+                throw new \Exception('Something wrong');
+            }
+
+            $manager = $this->getDoctrine()->getManager();
+            $manager->remove($image);
+            $manager->flush();
+            return new Response('Delete successfully');
+        }
+
+        throw new \Exception('Image not found');
+    }
+
+    public function profile()
+    {
+        return $this->render('profile.html.twig');
     }
 }

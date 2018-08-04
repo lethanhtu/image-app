@@ -6,8 +6,8 @@
             <div class="col-lg-1 col-md-1 col-xs-1">
             </div>
             <div class="col-lg-10 col-md-10 col-xs-10">
-                <div class="image-detail">
-                    <img src="{{'/images/original/' ~ fileName}}"/>
+                <div id="image-detail" image-id="{{id}}">
+                    <img src="{{'/images/gallery/' ~ hashedName}}"/>
                 </div>
                 <hr>
                 <div>
@@ -20,7 +20,7 @@
                                 {% set class = 'fa fa-thumbs-o-up' %}
                                 {% set action = 'like' %}
                             {% endif %}
-                            <span class="h4" id="like"  action="{{action}}" image-id="{{id}}">
+                            <span class="h4" id="like"  action="{{action}}">
                                 <i class="{{class}}"></i>
                             </span>
                             <small>
@@ -30,8 +30,12 @@
                     </div>
                     <div class="float-right">
                         <small>
-                            Uploaded by <strong>{{uploadedBy}}</strong> on {{createdDate|date('m-d-Y') }}
-                            <span id="download"><i class="fa fa-download" aria-hidden="true"></i></span></span> {{size}}
+                            Uploaded by <strong>{{uploadedBy}}</strong> on {{createdDate|date('m-d-Y') }}&nbsp; &nbsp;
+                            <span id="download"><i class="fa fa-download" aria-hidden="true"></i></span></span> {{size|size_format}}
+                            {% if app.user and (app.user.username ==  uploadedBy or app.user.role == 1) %}
+                                &nbsp; &nbsp;
+                                <span id="delete"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                            {% endif %}
                         </small>
                     </div>
                 </div>

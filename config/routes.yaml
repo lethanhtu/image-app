@@ -1,34 +1,48 @@
 index:
     path: /
     controller: App\Controller\AppController::index
-
-view_image:
-    path: /detail/{imageId}
-    controller: App\Controller\AppController::view
-
-dowload_image:
-    path: /download/{imageId}
-    controller: App\Controller\AppController::download
+    methods: [GET]
 
 upload:
     path: /upload
     controller: App\Controller\UserController::upload
+    methods: [GET,POST]
 
-unlike:
-    path: /unlike
-    controller: App\Controller\UserController::removeLike
+view:
+    path: /image/{imageId}
+    controller: App\Controller\UserController::view
+    methods: [GET]
+
+dowload:
+    path: /download/{imageId}
+    controller: App\Controller\UserController::download
+    methods: [GET]
 
 like:
     path: /like
     controller: App\Controller\UserController::like
+    methods: [POST]
+
+delete:
+    path: /image/{imageId}
+    controller: App\Controller\UserController::delete
+    methods: [DELETE]
 
 login:
     path: /login
     controller: App\Controller\UserController::login
+    methods: [GET,POST]
+
 logout:
     path: /logout
     controller: App\Controller\UserController::logout
+    methods: [GET]
 
 register:
     path: /register
     controller: App\Controller\UserController::register
+    methods: [GET,POST]
+
+profile:
+    path: /profile
+    controller: App\Controller\UserController::profile

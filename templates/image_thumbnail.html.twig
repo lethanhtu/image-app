@@ -1,8 +1,8 @@
 <div class="col-lg-3 col-md-4 col-xs-6">
-    <a href="/detail/{{image['id']}}">
-        <img class="img-fluid img-thumbnail" src="{{'/images/thumbnail/' ~ image['fileName']}}">
+    <a href="/image/{{image['id']}}">
+        <img class="img-fluid img-thumbnail" src="{{'/images/thumbnail/' ~ image['hashedName']}}">
     </a>
     <span class="figure-caption">
-        <small>By {{image['uploadedByName']}}</small>
+        <small>By <strong>{{image['uploadedByName']}}</strong></small>
     </span>
 </div>
