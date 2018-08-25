@@ -74,7 +74,7 @@ class UserController extends Controller
         $image = $images = $doctrine->getRepository(Image::class)->find($imageId);
 
         // Validate image id is invalid
-        if(empty($image)) {
+        if (empty($image)) {
             return new JsonResponse([
                 'success' => false,
                 'error_info'=>'image_not_found'
@@ -82,7 +82,7 @@ class UserController extends Controller
         }
 
         // Validate action is invalid
-        if($action !=='unlike' &&  $action !== 'like') {
+        if ($action !=='unlike' &&  $action !== 'like') {
             return new JsonResponse([
                 'success' => false,
                 'error_info'=>'action_invalid'
@@ -91,17 +91,9 @@ class UserController extends Controller
 
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
-        // Check there is a logged in user
-        if('object' !== gettype($user)) {
-            return new JsonResponse([
-                'success'=>false,
-                'error_info' => 'required_login'
-            ]);
-        }
-
         $manager = $doctrine->getManager();
 
-        if($action == 'like') {
+        if ($action == 'like') {
             $image->addLikedBy($user);
             $likedByCurrentUser  = true;
         } else {
@@ -117,7 +109,7 @@ class UserController extends Controller
 
         return new JsonResponse([
             'success' => true,
-            'html' => $template->renderBlock('like',[
+            'html' => $template->renderBlock('like', [
                 'id' => $imageId,
                 'likedByCurrentUser' => $likedByCurrentUser,
                 'likeCount' => count($image->getLikedBy())
@@ -128,7 +120,7 @@ class UserController extends Controller
     public function view($imageId)
     {
         $image = $images = $this->getDoctrine()->getRepository(Image::class)->find($imageId);
-        if(!$image) {
+        if (!$image) {
             return new Response('Image not found');
         }
 
@@ -136,10 +128,10 @@ class UserController extends Controller
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $likedByCurrentUser = false;
 
-        if('object' == gettype($user) && $likedBy->contains($user)) {
+        if ('object' == gettype($user) && $likedBy->contains($user)) {
             $likedByCurrentUser = true;
         }
-        return $this->render('image_detail.html.twig',[
+        return $this->render('image_detail.html.twig', [
             'hashedName'=>$image->getHashedName(),
             'id'=> $image->getId(),
             'uploadedBy' => $image->getUploadedBy()->getUsername(),
@@ -155,23 +147,22 @@ class UserController extends Controller
         $image = $this->getDoctrine()->getRepository(Image::class)->find($imageId);
         if ($image) {
             $content = file_get_contents($this->container->getParameter('kernel.project_dir').'/public/images/original/'.$image->getHashedName());
-            return new Response($content, Response::HTTP_OK,[
+            return new Response($content, Response::HTTP_OK, [
                 'Content-Type' => 'image/jpeg',
                 'Content-Length' => 424586,
-                'Content-Disposition'=> sprintf('attachment; filename="%s"',$image->getFilename())
+                'Content-Disposition'=> sprintf('attachment; filename="%s"', $image->getFilename())
             ]);
         }
 
         throw new \Exception('Image not found');
-
     }
 
     public function delete($imageId)
     {
         $image = $images = $this->getDoctrine()->getRepository(Image::class)->find($imageId);
-        if($image) {
+        if ($image) {
             $user = $this->container->get('security.token_storage')->getToken()->getUser();
-            if('object' != gettype($user) || ($user->getId() != $image->getUploadedBy()->getId() && $user->getRole() != 1)) {
+            if ($user->getId() != $image->getUploadedBy()->getId() && $user->getRole() != User::ROLE_ADMIN) {
                 throw new \Exception('Something wrong');
             }
 
@@ -186,6 +177,17 @@ class UserController extends Controller
 
     public function profile()
     {
-        return $this->render('profile.html.twig');
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $query = $this->getDoctrine()->getRepository(Image::class)->getNumberOfUploadedFileByUser(100);
+        echo $query;
+        return $this->render('profile.html.twig',[
+            'username'=>$user->getUsername(),
+            'fullName'=>$user->getFullName(),
+            'email'=>$user->getEmail(),
+            'createdDate'=>$user->getCreatedDate(),
+            'role'=>$user->getRole(),
+            'totalUpload'=>0,
+            'totalLikeReceived'=>10
+        ]);
     }
 }

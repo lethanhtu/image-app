@@ -201,7 +201,14 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        $roles = [];
+        if($this->getRole() === self::ROLE_ADMIN)  {
+            $roles[] = 'ROLE_ADMIN';
+        } else {
+            $roles[] = 'ROLE_USER';
+        }
+
+        return $roles;
     }
 
     public function getSalt()
