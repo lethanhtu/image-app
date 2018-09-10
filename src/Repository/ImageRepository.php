@@ -49,11 +49,12 @@ class ImageRepository extends ServiceEntityRepository
     */
    public function getNumberOfUploadedFileByUser($userId)
    {
-       return $this->createQueryBuilder('i')
-       ->andWhere('i.uploadedById = :user_id')
+       $result =   $this->createQueryBuilder('i')
+       ->andWhere('i.uploadedBy = :user_id')
        ->setParameter('user_id',$userId)
-       ->select('count(i.id)')
+       ->select('count(i.id) as numOfImages')
        ->getQuery()
-       ->getSql();
+       ->getOneOrNullResult();
+       return $result = $result['numOfImages'];
    }
 }

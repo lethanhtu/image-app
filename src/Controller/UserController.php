@@ -178,16 +178,18 @@ class UserController extends Controller
     public function profile()
     {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
-        $query = $this->getDoctrine()->getRepository(Image::class)->getNumberOfUploadedFileByUser(100);
-        echo $query;
         return $this->render('profile.html.twig',[
             'username'=>$user->getUsername(),
             'fullName'=>$user->getFullName(),
             'email'=>$user->getEmail(),
             'createdDate'=>$user->getCreatedDate(),
             'role'=>$user->getRole(),
-            'totalUpload'=>0,
-            'totalLikeReceived'=>10
+            'totalUpload'=>$this->getDoctrine()->getRepository(Image::class)->getNumberOfUploadedFileByUser($user->getId()),
         ]);
+    }
+
+    public function changeLanguage()
+    {
+
     }
 }

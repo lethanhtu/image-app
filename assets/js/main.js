@@ -8,7 +8,9 @@ $(document).ready(function() {
             data: {
                 image_id: $('#image-detail').attr('image-id')
             },
-            complete: function ()
+            complete: function () {
+                
+            }
         });
     });
 

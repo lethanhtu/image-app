@@ -11,7 +11,7 @@ use App\Entity\User;
 
 class AppController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $images = $this->getDoctrine()->getRepository(Image::class)->findAll();
         $data = [];
@@ -22,7 +22,6 @@ class AppController extends Controller
                 'uploadedByName'=>$image->getUploadedBy()->getFullName()
             ];
         }
-        $listImages = [];
         return $this->render('gallery.html.twig', [
           'images' => $data
         ]);

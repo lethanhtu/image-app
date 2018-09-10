@@ -9,9 +9,9 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
@@ -35,6 +35,10 @@
                     </li>
                 {% endif %}
             </ul>
+            <div class="langauges">
+                <a href="/language/en"><img src="{{asset('build/images/gb.png')}}"/></a>/
+                <a href="/language/fr"><img src="{{asset('build/images/fr.png')}}"/></a>
+            </div>
         </nav>
         <div class="content">
             {% for message in app.flashes('notice') %}

@@ -9,6 +9,9 @@ framework:
     session:
         handler_id: ~
 
+    default_locale: 'en'
+    translator:
+        fallbacks: ['en']
     #esi: true
     #fragments: true
     php_errors:
