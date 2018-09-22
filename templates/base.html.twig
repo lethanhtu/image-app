@@ -35,9 +35,9 @@
                     </li>
                 {% endif %}
             </ul>
-            <div class="langauges">
-                <a href="/language/en"><img src="{{asset('build/images/gb.png')}}"/></a>/
-                <a href="/language/fr"><img src="{{asset('build/images/fr.png')}}"/></a>
+            <div class="languages">
+                <a href="{{path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'en'}))}}"><img src="{{asset('build/images/gb.png')}}"/></a>/
+                <a href="{{path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'fr'}))}}"><img src="{{asset('build/images/fr.png')}}"/></a>
             </div>
         </nav>
         <div class="content">

@@ -175,6 +175,10 @@ class UserController extends Controller
         throw new \Exception('Image not found');
     }
 
+/**
+ * [profile description]
+ * @return [type] [description]
+ */
     public function profile()
     {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
@@ -186,10 +190,5 @@ class UserController extends Controller
             'role'=>$user->getRole(),
             'totalUpload'=>$this->getDoctrine()->getRepository(Image::class)->getNumberOfUploadedFileByUser($user->getId()),
         ]);
-    }
-
-    public function changeLanguage()
-    {
-
     }
 }

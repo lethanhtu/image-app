@@ -35,7 +35,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-         - { path: ^/profile, roles: ROLE_USER }
-         - { path: ^/upload, roles: ROLE_USER }
-         - { path: ^/image, roles: ROLE_USER, methods: [DELETE] }
-         - { path: ^/like, roles: ROLE_USER }
+         # - { path: ^/%app.locales%/profile, roles: ROLE_USER }
+         # - { path: ^/%app.locales%/upload, roles: ROLE_USER }
+         # - { path: ^/%app.locales%/image, roles: ROLE_USER, methods: [DELETE] }
+         # - { path: ^/%app.locales%/like, roles: ROLE_USER }
