@@ -1,0 +1,90 @@
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="app_title">
+                <source>Image gallery</source>
+                <target>Galeries d'images</target>
+            </trans-unit>
+            <trans-unit id="gallery">
+                <source>Gallery</source>
+                <target>Galeries</target>
+            </trans-unit>
+            <trans-unit id="upload">
+                <source>Upload</source>
+                <target>Déposez</target>
+            </trans-unit>
+            <trans-unit id="hello">
+                <source>Hello</source>
+                <target>Bonjour</target>
+            </trans-unit>
+            <trans-unit id="profile">
+                <source>Profile</source>
+                <target>Profil</target>
+            </trans-unit>
+            <trans-unit id="login">
+                <source>Login</source>
+                <target>Connexion</target>
+            </trans-unit>
+            <trans-unit id="logout">
+                <source>Logout</source>
+                <target>Déconnexion</target>
+            </trans-unit>
+            <trans-unit id="register">
+                <source>Register</source>
+                <target>S'inscrire</target>
+            </trans-unit>
+            <trans-unit id="uploaded_by">
+                <source>By</source>
+                <target>De</target>
+            </trans-unit>
+            <trans-unit id="upload_date">
+                <source>Upload date</source>
+                <target>Date de dépôt</target>
+            </trans-unit>
+            <trans-unit id="username">
+                <source>Username</source>
+                <target>Nom d'utilisateur</target>
+            </trans-unit>
+            <trans-unit id="password">
+                <source>Password</source>
+                <target>Mot de passe</target>
+            </trans-unit>
+            <trans-unit id="form_login_button">
+                <source>Login</source>
+                <target>Connexion</target>
+            </trans-unit>
+            <trans-unit id="form_full_name">
+                <source>Full name</source>
+                <target>Nom complet</target>
+            </trans-unit>
+            <trans-unit id="password_confirmation">
+                <source>Password confirmation</source>
+                <target>Confirmation mot de passe</target>
+            </trans-unit>
+            <trans-unit id="accept_term_condition">
+                <source>I agree to Terms and Conditions</source>
+                <target>J'accepte les termes et conditions</target>
+            </trans-unit>
+            <trans-unit id="select_image">
+                <source>Select image</source>
+                <target>Sélectionner une image</target>
+            </trans-unit>
+            <trans-unit id="join_date">
+                <source>Join date</source>
+                <target>Date d'inscription</target>
+            </trans-unit>
+            <trans-unit id="role">
+                <source>Role</source>
+                <target>Rôle</target>
+            </trans-unit>
+            <trans-unit id="total_depositted_images">
+                <source>Total depositted images</source>
+                <target>Nombre total d'images déposées</target>
+            </trans-unit>
+            <trans-unit id="total_likes_received">
+                <source>Total likes received</source>
+                <target>Total aime a reçu</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>s

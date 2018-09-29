@@ -26,7 +26,7 @@ class RegisterType extends AbstractType
         ])
         ->add('terms_accepted', CheckboxType::class, [
             'mapped' => false,
-            'label'=>'Accept']);
+            'label'=>'You agree to our Terms and Conditions']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
