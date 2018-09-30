@@ -1,7 +1,7 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
-            <trans-unit id="app_title">
+            <trans-unit id="title">
                 <source>Image gallery</source>
                 <target>Galeries d'images</target>
             </trans-unit>
@@ -62,8 +62,8 @@
                 <target>Confirmation mot de passe</target>
             </trans-unit>
             <trans-unit id="accept_term_condition">
-                <source>I agree to Terms and Conditions</source>
-                <target>J'accepte les termes et conditions</target>
+                <source>You agree to our Terms and Conditions</source>
+                <target>Vous acceptez nos conditions générales</target>
             </trans-unit>
             <trans-unit id="select_image">
                 <source>Select image</source>
@@ -87,4 +87,4 @@
             </trans-unit>
         </body>
     </file>
-</xliff>s
+</xliff>

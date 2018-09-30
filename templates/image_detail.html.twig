@@ -30,7 +30,7 @@
                     </div>
                     <div class="float-right">
                         <small>
-                            By <strong>{{uploadedBy}}</strong> &nbsp; &nbsp; Upload date {{createdDate|date('m-d-Y') }}&nbsp; &nbsp;
+                            {{'By'|trans}} <strong>{{uploadedBy}}</strong> &nbsp; &nbsp; {{'Upload date'|trans}} {{createdDate|date('m-d-Y') }}&nbsp; &nbsp;
                             <span id="download"><i class="fa fa-download" aria-hidden="true"></i></span></span> {{size|size_format}}
                             {% if app.user and (app.user.username ==  uploadedBy or app.user.role == 1) %}
                                 &nbsp; &nbsp;
