@@ -71,7 +71,7 @@ class UserController extends Controller
         $action = $request->get('action');
         $doctrine = $this->getDoctrine();
 
-        $image = $images = $doctrine->getRepository(Image::class)->find($imageId);
+        $image = $doctrine->getRepository(Image::class)->find($imageId);
 
         // Validate image id is invalid
         if (empty($image)) {
@@ -175,10 +175,10 @@ class UserController extends Controller
         throw new \Exception('Image not found');
     }
 
-/**
- * [profile description]
- * @return [type] [description]
- */
+    /**
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function profile()
     {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
