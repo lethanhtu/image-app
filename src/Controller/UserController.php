@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use App\Event\UserUploadEvent;
 use App\Service\ImageProcessor;
 use App\Form\RegisterType;
@@ -57,12 +58,11 @@ class UserController extends Controller
         return new Response();
     }
 
-    public function upload(Request $request, ImageProcessor $imageProcessor)
+    public function upload(Request $request, ImageProcessor $imageProcessor, EventDispatcherInterface $dispatcher)
     {
         if ($request->getMethod()==='GET') {
             return $this->render('upload.html.twig');
         } else {
-            $dispatcher = new EventDispatcher();
             $event = new UserUploadEvent($request->files->get('image'));
             $dispatcher->dispatch(UserUploadEvent::NAME, $event);
             return $this->redirectToRoute('index');

@@ -4,12 +4,13 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" href="{{ asset('build/css/app.css')}}"/>
         <title>
-            {% block title %}Image gallery{% endblock %}
+            {% block title %}{{'Image gallery'|trans}}{% endblock %}
         </title>
     </head>
 
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            {{'a'|trans}}
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="{{path('index')}}">{{'Gallery'|trans}}</a>
