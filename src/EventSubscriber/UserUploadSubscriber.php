@@ -16,7 +16,6 @@ class UserUploadSubscriber implements EventSubscriberInterface
 
     public function resizeImage(UserUploadEvent $event)
     {
-        $uploadedImage = $event->getFile();
-        file_put_contents('aaa',1);
+        echo '123';
     }
 }

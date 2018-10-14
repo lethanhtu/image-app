@@ -33,9 +33,5 @@ services:
            - '@security.token_storage'
            - '%kernel.project_dir%/public/images'
 
-    App\EventSubscriber\UserUploadSubscriber:
-      tags:
-          - {name: kenel.event_listener }
-
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
