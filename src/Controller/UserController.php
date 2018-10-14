@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use App\Event\UserUploadEvent;
 use App\Service\ImageProcessor;
 use App\Form\RegisterType;
 use App\Entity\User;
@@ -60,7 +62,9 @@ class UserController extends Controller
         if ($request->getMethod()==='GET') {
             return $this->render('upload.html.twig');
         } else {
-            $imageProcessor->save($request->files->get('image'));
+            $dispatcher = new EventDispatcher();
+            $event = new UserUploadEvent($request->files->get('image'));
+            $dispatcher->dispatch(UserUploadEvent::NAME, $event);
             return $this->redirectToRoute('index');
         }
     }
@@ -176,7 +180,7 @@ class UserController extends Controller
     }
 
     /**
-     * 
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function profile()

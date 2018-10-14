@@ -1,5 +1,5 @@
 routing_localized:
     resource: raw_routing.yaml
     prefix:
-        en: '/en'
+        en: '/'
         fr: '/fr'
