@@ -1,16 +1,14 @@
 $(document).ready(function() {
     $('body').on('click', '#like', function() {
-        var action = $('#like').attr('action');
-
         $.ajax({
             url: '/like',
             method: 'POST',
             data: {
                 image_id: $('#image-detail').attr('image-id')
             },
-            complete: function () {
-                
-            }
+            success: function (result) {
+                $('#like').replaceWith(result.data);
+            },
         });
     });
 

@@ -35,7 +35,7 @@ class ImageProcessor
         $imageResize->save($this->path.'/thumbnail/'.$hashedName);
 
         $imageResize->resizeToWidth(900);
-        $imageResize->save($this->path.'/gallery/'.$hashedName);
+        $imageResize->save($this->path.'/detail/'.$hashedName);
 
         $user = $this->tokenStorage->getToken()->getUser();
 

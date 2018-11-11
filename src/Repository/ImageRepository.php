@@ -47,7 +47,7 @@ class ImageRepository extends ServiceEntityRepository
         ;
     }
     */
-   public function getNumberOfUploadedFileByUser($userId)
+   public function getTotalByUser($userId)
    {
        $result =   $this->createQueryBuilder('i')
        ->andWhere('i.uploadedBy = :user_id')

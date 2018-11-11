@@ -5,43 +5,79 @@ namespace App\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputOption;
 
-class ReportCommand extends ContainerAwareCommand
+class PrepareCommand extends Command
 {
     protected $publicDir;
 
     public function __construct($publicDir)
     {
-        $this->imageDir = $publicDir.DIRECTORY_SEPARATOR.'images';
+        $this->imageDir = $publicDir;
+        parent::__construct();
     }
 
     protected function configure()
     {
         $this->setName('app:prepare_dir')
+        ->addOption('log', 'l', InputOption::VALUE_OPTIONAL, 'The status of image directory', false)
         ->setDescription('Create image directory')
         ->setHelp('This command create directory for saving uploaded images');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        prepare($this->imageDir);
-        prepare($this->getSubDirPath('gallery'));
-        prepare($this->getSubDirPath('original'));
-        prepare($this->getSubDirPath('thumbnail'));
+        $showLog = $input->getOption('log') !== false;
+
+        if($showLog) {
+            $output->writeln('List created directory:');
+            $isCreated = false;
+
+        }
+
+        if($this->prepareDir($this->imageDir)) {
+            $output->writeln($this->imageDir);
+            $isCreated = true;
+        }
+
+        if($this->prepareDir($this->getSubDirPath('detail')) && $showLog) {
+            $output->writeln($this->getSubDirPath('detail'));
+            $isCreated = true;
+        }
+
+        if($this->prepareDir($this->getSubDirPath('thumbnail')) && $showLog) {
+            $output->writeln($this->getSubDirPath('thumbnail'));
+            $isCreated = true;
+        }
+
+        if($this->prepareDir($this->getSubDirPath('original')) && $showLog) {
+            $output->writeln($this->getSubDirPath('original'));
+            $isCreated = true;
+        }
+
+        if($showLog && !$isCreated) {
+            $output->writeln('There is not directory is created');
+        }
+
+
+
     }
 
-    protected function prepareDir($dir)
+    public function prepareDir($dir)
     {
-        if(!file_exist($dir)){
+        $created = false;
+        if (!file_exists($dir)) {
             mkdir($dir, 0755);
-        } elseif(is_writable($dir)) {
+            $created = true;
+        } elseif (!is_writable($dir) || !is_readable($dir)) {
             chmod($dir, 0755);
         }
+
+        return $created;
     }
 
 
-    protected function getSubDirPath($subDir)
+    public function getSubDirPath($subDir)
     {
         return $this->imageDir.DIRECTORY_SEPARATOR.$subDir;
     }

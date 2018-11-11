@@ -3,44 +3,44 @@
 {% block body %}
     <div class="container">
         <div class="row">
-            <div class="col-lg-1 col-md-1 col-xs-1">
-            </div>
-            <div class="col-lg-10 col-md-10 col-xs-10">
-                <div id="image-detail" image-id="{{id}}">
-                    <img src="{{'/images/gallery/' ~ hashedName}}"/>
+            <div class="col-lg-8 offset-lg-2 col-md-2 offset-md-2 col-xs-8 offset-xs-2">
+                <div id="image-detail" image-id="{{image.getId()}}">
+                    <img src="{{'/images/detail/' ~ image.getHashedName()}}"/>
                 </div>
+
                 <hr>
                 <div>
                     <div class="float-left">
-                        {% block like %}
-                            {% if likedByCurrentUser %}
-                                {% set class = 'fa fa-thumbs-up' %}
-                                {% set action = 'unlike' %}
+                        {% if is_granted('like', image) %}
+                            {% block like %}
+                                <div id="like">
+                                    <span class="h4">
+                                        <i class="fa fa-thumbs-o-up{% if liked %} liked{% endif %}"></i>
+                                    </span>
+                                    <small>
+                                        <span id="like-count">{{likeCount}}</span>
+                                    </small>
+                                </div>
+                            {% endblock %}
                             {% else %}
-                                {% set class = 'fa fa-thumbs-o-up' %}
-                                {% set action = 'like' %}
+                                <small><a href="{{path('login')}}">Login</a> to like this picture</small>
                             {% endif %}
-                            <span class="h4" id="like"  action="{{action}}">
-                                <i class="{{class}}"></i>
-                            </span>
-                            <small>
-                                <span id="like-count">{{likeCount}}</span>
-                            </small>
-                        {% endblock %}
+
                     </div>
                     <div class="float-right">
                         <small>
-                            {{'By'|trans}} <strong>{{uploadedBy}}</strong> &nbsp; &nbsp; {{'Upload date'|trans}} {{createdDate|date('m-d-Y') }}&nbsp; &nbsp;
-                            <span id="download"><i class="fa fa-download" aria-hidden="true"></i></span></span> {{size|size_format}}
-                            {% if app.user and (app.user.username ==  uploadedBy or app.user.role == 1) %}
-                                &nbsp; &nbsp;
+                            {{'By'|trans}} <strong>{{image.getUploadedBy().getUsername()}}</strong> &nbsp; &nbsp;
+                            {{'Upload date'|trans}} {{image.getCreatedDate()|date('m-d-Y') }}&nbsp; &nbsp;
+                            <span id="download">
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                                {{image.getSize()|size_format}}
+                            </span>
+                            {% if is_granted('delete', image) %}
                                 <span id="delete"><i class="fa fa-trash" aria-hidden="true"></i></span>
                             {% endif %}
                         </small>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-1 col-md-1 col-xs-1">
             </div>
         </div>
     </div>

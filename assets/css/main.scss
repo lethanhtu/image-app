@@ -9,6 +9,10 @@
 
     #like {
         cursor: pointer;
+        .liked {
+            color: green;
+            font-weight: bold;
+        }
     }
 
     .like-disabled {

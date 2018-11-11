@@ -72,50 +72,32 @@ class UserController extends Controller
     public function like(Request $request)
     {
         $imageId = $request->get('image_id');
-        $action = $request->get('action');
+
         $doctrine = $this->getDoctrine();
 
         $image = $doctrine->getRepository(Image::class)->find($imageId);
-
-        // Validate image id is invalid
-        if (empty($image)) {
-            return new JsonResponse([
-                'success' => false,
-                'error_info'=>'image_not_found'
-            ]);
-        }
-
-        // Validate action is invalid
-        if ($action !=='unlike' &&  $action !== 'like') {
-            return new JsonResponse([
-                'success' => false,
-                'error_info'=>'action_invalid'
-            ]);
-        }
 
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
         $manager = $doctrine->getManager();
 
-        if ($action == 'like') {
-            $image->addLikedBy($user);
-            $likedByCurrentUser  = true;
-        } else {
+        if($image->getLikedBy()->contains($user)) {
             $image->removeLikedBy($user);
-            $likedByCurrentUser = false;
+            $liked = false;
+        } else {
+            $image->addLikedBy($user);
+            $liked = true;
         }
 
         $manager->persist($image);
         $manager->flush();
 
-        $twig = $this->get('twig');
-        $template = $twig->loadTemplate('image_detail.html.twig');
+        $template = $this->get('twig')->loadTemplate('image_detail.html.twig');
 
         return new JsonResponse([
             'success' => true,
-            'html' => $template->renderBlock('like', [
-                'id' => $imageId,
-                'likedByCurrentUser' => $likedByCurrentUser,
+            'data' => $template->renderBlock('like', [
+                'liked' => $liked,
                 'likeCount' => count($image->getLikedBy())
             ])
         ]);
@@ -130,53 +112,49 @@ class UserController extends Controller
 
         $likedBy = $image->getLikedBy();
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
-        $likedByCurrentUser = false;
 
-        if ('object' == gettype($user) && $likedBy->contains($user)) {
-            $likedByCurrentUser = true;
-        }
         return $this->render('image_detail.html.twig', [
-            'hashedName'=>$image->getHashedName(),
-            'id'=> $image->getId(),
-            'uploadedBy' => $image->getUploadedBy()->getUsername(),
-            'createdDate' => $image->getCreatedDate(),
             'likeCount' => count($likedBy),
-            'size' => $image->getSize(),
-            'likedByCurrentUser'=> $likedByCurrentUser
+            'liked'=> $likedBy->contains($user),
+            'image'=>$image
         ]);
     }
 
     public function download($imageId)
     {
         $image = $this->getDoctrine()->getRepository(Image::class)->find($imageId);
-        if ($image) {
-            $content = file_get_contents($this->container->getParameter('kernel.project_dir').'/public/images/original/'.$image->getHashedName());
-            return new Response($content, Response::HTTP_OK, [
-                'Content-Type' => 'image/jpeg',
-                'Content-Length' => 424586,
-                'Content-Disposition'=> sprintf('attachment; filename="%s"', $image->getFilename())
-            ]);
+
+        if($image) {
+            throw new \Exception('Image not found');
         }
 
-        throw new \Exception('Image not found');
+        $content = file_get_contents($this->container->getParameter('kernel.project_dir').'/public/images/original/'.$image->getHashedName());
+        return new Response($content, Response::HTTP_OK, [
+            'Content-Type' => 'image/jpeg',
+            'Content-Length' => 424586,
+            'Content-Disposition'=> sprintf('attachment; filename="%s"', $image->getFilename())
+        ]);
     }
 
     public function delete($imageId)
     {
         $image = $images = $this->getDoctrine()->getRepository(Image::class)->find($imageId);
-        if ($image) {
-            $user = $this->container->get('security.token_storage')->getToken()->getUser();
-            if ($user->getId() != $image->getUploadedBy()->getId() && $user->getRole() != User::ROLE_ADMIN) {
-                throw new \Exception('Something wrong');
-            }
-
-            $manager = $this->getDoctrine()->getManager();
-            $manager->remove($image);
-            $manager->flush();
-            return new Response('Delete successfully');
+        if (empty($image)) {
+            return new JsonResponse([
+                'success' => false,
+                'data'=> 'Image not found'
+            ], 404);
         }
 
-        throw new \Exception('Image not found');
+        $this->denyAccessUnlessGranted('delete', $image);
+
+        $manager = $this->getDoctrine()->getManager();
+        $manager->remove($image);
+        $manager->flush();
+
+        return new JsonResponse([
+            'success'=>true
+        ], 200);
     }
 
     /**
@@ -192,7 +170,7 @@ class UserController extends Controller
             'email'=>$user->getEmail(),
             'createdDate'=>$user->getCreatedDate(),
             'role'=>$user->getRole(),
-            'totalUpload'=>$this->getDoctrine()->getRepository(Image::class)->getNumberOfUploadedFileByUser($user->getId()),
+            'totalUpload'=>$this->getDoctrine()->getRepository(Image::class)->getTotalByUser($user->getId())
         ]);
     }
 }

@@ -49,13 +49,17 @@
                 <source>Password</source>
                 <target>Mot de passe</target>
             </trans-unit>
-            <trans-unit id="form_login_button">
+            <trans-unit id="login_button">
                 <source>Login</source>
                 <target>Connexion</target>
             </trans-unit>
-            <trans-unit id="form_full_name">
+            <trans-unit id="full_name">
                 <source>Full name</source>
                 <target>Nom complet</target>
+            </trans-unit>
+            <trans-unit id="email">
+                <source>Email</source>
+                <target>Email</target>
             </trans-unit>
             <trans-unit id="password_confirmation">
                 <source>Password confirmation</source>
@@ -69,6 +73,8 @@
                 <source>Select image</source>
                 <target>Sélectionner une image</target>
             </trans-unit>
+
+            
             <trans-unit id="join_date">
                 <source>Join date</source>
                 <target>Date d'inscription</target>
@@ -77,13 +83,9 @@
                 <source>Role</source>
                 <target>Rôle</target>
             </trans-unit>
-            <trans-unit id="total_depositted_images">
-                <source>Total depositted images</source>
+            <trans-unit id="total_uploaded_images">
+                <source>Total uploaded images</source>
                 <target>Nombre total d'images déposées</target>
-            </trans-unit>
-            <trans-unit id="total_likes_received">
-                <source>Total likes received</source>
-                <target>Total aime a reçu</target>
             </trans-unit>
         </body>
     </file>

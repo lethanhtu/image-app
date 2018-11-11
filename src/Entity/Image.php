@@ -163,4 +163,9 @@ class Image
 
         return $this;
     }
+
+    public function switchLike()
+    {
+        
+    }
 }

@@ -3,6 +3,7 @@
 parameters:
     locale: en
     app.locales: en|fr
+    image_dir: '%kernel.project_dir%/public/images'
 
 services:
     # default configuration for services in *this* file
@@ -32,6 +33,11 @@ services:
            - '@doctrine'
            - '@security.token_storage'
            - '%kernel.project_dir%/public/images'
+
+    App\Command\PrepareCommand:
+        arguments:
+            - '%image_dir%'
+
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
