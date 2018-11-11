@@ -8,33 +8,63 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use App\Entity\User;
 
 class CreateAdminAccountCommand extends Command
 {
     protected static $defaultName = 'CreateAdminAccount';
 
+    protected $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+        parent::__construct();
+    }
+
     protected function configure()
     {
         $this
-            ->setDescription('Add a short description for your command')
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
+            ->setDescription('Create admin accounts')
+            ->addArgument('email', InputArgument::REQUIRED, 'Email of admin account')
+            ->addArgument('password', InputArgument::REQUIRED, 'Password of admin account')
+            ->addOption('force', null, InputOption::VALUE_NONE, 'Option description')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('arg1');
+        $email = $input->getArgument('email');
+        $password = $input->getArgument('password');
 
-        if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
+        $user = $this->doctrine->getRepository(User::class)->findOneByUsername('admin');
+        $manager = $this->doctrine->getManager();
+
+        if($user && $input->getOption('force')) {
+            $user->setEmail($email);
+            $user->setPassword($password);
+            $manager->persist($user);
+            $manager->flush();
+            $io->success('Admin account is updated successfully');
+            return;
         }
 
-        if ($input->getOption('option1')) {
-            // ...
+        if (!$user) {
+            $user = new User();
+            $user->setUsername('admin');
+            $user->setEmail($email);
+            $user->password($password);
+            $user->setRole(User::ROLE_ADMIN);
+            $user->setFullName('Administrator');
+            $manager->persist($user);
+            $manager->flush();
+            $io->success('Admin account is created successfully');
+            return;
         }
 
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->note('Admin account is already exist');
+
     }
 }

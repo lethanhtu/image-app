@@ -1,22 +1,22 @@
 <?php
 namespace App\Service;
 
-use Gumlet\ImageResize;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use App\Entity\User;
-use App\Entity\Image;
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\ORM\EntityManager;
+use Gumlet\ImageResize;
+use App\Entity\Image;
+use App\Entity\User;
 
 class ImageProcessor
 {
-    private $doctrine;
+    private $entityManager;
     private $tokenStorage;
     private $path;
 
-    public function __construct(Registry $doctrine, TokenStorage $tokenStorage, $path = '')
+    public function __construct(EntityManager $entityManager, TokenStorage $tokenStorage, $path = '')
     {
-        $this->doctrine = $doctrine;
+        $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage;
         $this->path = $path;
     }
@@ -46,7 +46,7 @@ class ImageProcessor
         $image->setCreatedDate(new \DateTime());
         $image->setHashedName($hashedName);
         $image->setUploadedBy($user);
-        $this->doctrine->getEntityManager()->persist($image);
-        $this->doctrine->getEntityManager()->flush();
+        $this->entityManager->persist($image);
+        $this->entityManager->flush();
     }
 }
