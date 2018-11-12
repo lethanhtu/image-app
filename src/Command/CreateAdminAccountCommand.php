@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,10 +17,12 @@ class CreateAdminAccountCommand extends Command
     protected static $defaultName = 'CreateAdminAccount';
 
     protected $doctrine;
+    protected $encoder;
 
-    public function __construct(ManagerRegistry $doctrine)
+    public function __construct(ManagerRegistry $doctrine, UserPasswordEncoderInterface $encoder)
     {
         $this->doctrine = $doctrine;
+        $this->encoder = $encoder;
         parent::__construct();
     }
 
@@ -40,11 +43,12 @@ class CreateAdminAccountCommand extends Command
         $password = $input->getArgument('password');
 
         $user = $this->doctrine->getRepository(User::class)->findOneByUsername('admin');
+        $hahsedPassword = $this->encoder->encodePassword(new User(), $password);
         $manager = $this->doctrine->getManager();
 
-        if($user && $input->getOption('force')) {
+        if ($user && $input->getOption('force')) {
             $user->setEmail($email);
-            $user->setPassword($password);
+            $user->setPassword($hahsedPassword);
             $manager->persist($user);
             $manager->flush();
             $io->success('Admin account is updated successfully');
@@ -55,7 +59,7 @@ class CreateAdminAccountCommand extends Command
             $user = new User();
             $user->setUsername('admin');
             $user->setEmail($email);
-            $user->password($password);
+            $user->setPassword($hahsedPassword);
             $user->setRole(User::ROLE_ADMIN);
             $user->setFullName('Administrator');
             $manager->persist($user);
@@ -65,6 +69,5 @@ class CreateAdminAccountCommand extends Command
         }
 
         $io->note('Admin account is already exist');
-
     }
 }

@@ -15,15 +15,15 @@ class UserUploadSubscriber implements EventSubscriberInterface
         $this->imageProcessor = $imageProcessor;
     }
 
+    public function onUserUpload(UserUploadEvent $event)
+    {
+        $this->imageProcessor->save($event->getFile());
+    }
+
     public static function getSubscribedEvents()
     {
         return [
-            UserUploadEvent::NAME  => [['resizeImage', 10]]
+           'user.upload' => 'onUserUpload',
         ];
-    }
-
-    public function resizeImage(UserUploadEvent $event)
-    {
-        $this->imageProcessor->save($event->getFile());
     }
 }

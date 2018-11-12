@@ -33,7 +33,6 @@
                             {{'Upload date'|trans}} {{image.getCreatedDate()|date('m-d-Y') }}&nbsp; &nbsp;
                             <span id="download">
                                 <i class="fa fa-download" aria-hidden="true"></i>
-                                {{image.getSize()|size_format}}
                             </span>
                             {% if is_granted('delete', image) %}
                                 <span id="delete"><i class="fa fa-trash" aria-hidden="true"></i></span>

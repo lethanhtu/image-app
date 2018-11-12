@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,6 +19,14 @@ use App\Entity\Image;
 
 class UserController extends Controller
 {
+
+    protected $user;
+
+    public function __construct(TokenStorageInterface $tokenStorage)
+    {
+        $this->user = $tokenStorage->getToken()->getUser();
+    }
+
     public function register(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $user = new User();
@@ -77,15 +86,13 @@ class UserController extends Controller
 
         $image = $doctrine->getRepository(Image::class)->find($imageId);
 
-        $user = $this->container->get('security.token_storage')->getToken()->getUser();
-
         $manager = $doctrine->getManager();
 
-        if($image->getLikedBy()->contains($user)) {
-            $image->removeLikedBy($user);
+        if($image->getLikedBy()->contains($this->user)) {
+            $image->removeLikedBy($this->user);
             $liked = false;
         } else {
-            $image->addLikedBy($user);
+            $image->addLikedBy($this->user);
             $liked = true;
         }
 
@@ -111,11 +118,10 @@ class UserController extends Controller
         }
 
         $likedBy = $image->getLikedBy();
-        $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
         return $this->render('image_detail.html.twig', [
             'likeCount' => count($likedBy),
-            'liked'=> $likedBy->contains($user),
+            'liked'=> $likedBy->contains($this->user),
             'image'=>$image
         ]);
     }
@@ -163,14 +169,13 @@ class UserController extends Controller
      */
     public function profile()
     {
-        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         return $this->render('profile.html.twig',[
-            'username'=>$user->getUsername(),
-            'fullName'=>$user->getFullName(),
-            'email'=>$user->getEmail(),
-            'createdDate'=>$user->getCreatedDate(),
-            'role'=>$user->getRole(),
-            'totalUpload'=>$this->getDoctrine()->getRepository(Image::class)->getTotalByUser($user->getId())
+            'username'=>$this->user->getUsername(),
+            'fullName'=>$this->user->getFullName(),
+            'email'=>$this->user->getEmail(),
+            'createdDate'=>$this->user->getCreatedDate(),
+            'role'=>$this->user->getRole(),
+            'totalUpload'=>count($this->user->getImageUpload())
         ]);
     }
 }
