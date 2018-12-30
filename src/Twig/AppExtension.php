@@ -28,10 +28,17 @@ class AppExtension extends AbstractExtension
 
     public function convertRoleToText($role)
     {
-        if($role == User::ROLE_ADMIN) {
-            return 'Admin';
+        switch ($role) {
+            case User::ROLE_ADMIN:
+                $txtRole = 'Admin';
+                break;
+            case User::ROLE_USER:
+                $txtRole = 'Normal user';
+                break;
+            default:
+                $txtRole = 'N/A';
         }
 
-        return 'Normal user';
+        return $txtRole;
     }
 }
